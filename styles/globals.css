@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   padding: 0;
@@ -14,3 +18,15 @@ a {
 * {
   box-sizing: border-box;
 }
+
+img {
+  max-width: 100%;
+}
+
+.icon-list-img {
+  width:12px;
+}
+
+/* .cards p {
+  font-size: 12px;
+} */
