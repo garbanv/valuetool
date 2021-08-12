@@ -28,7 +28,7 @@ const Tool = ({data}) => {
 
   /* FILTERS */
   const filteredByRegion = filteredList.filter(region=>region.fields.Region===selectedRegion)
-  const filteredByBeneficiary = filteredList.filter(beneficiary=>beneficiary.fields['Who benefits?']===selectedBeneficiary)
+  const filteredByBeneficiary = filteredList.filter(beneficiary=>beneficiary.fields['Who benefits?']===selectedBeneficiary)  
   const filterByRegionAndBeneficiary = filteredList.filter(item=>item.fields.Region===selectedRegion && item.fields['Who benefits?']===selectedBeneficiary)
 
 /* GET REGIONS CLEAN LIST */
@@ -62,40 +62,75 @@ const handleBeneficiaryList=()=>{
 /* HANDLE FLUNCTIONS */
 
 const handleRegions = (value) =>{
-  setLoading(true)
-  setFilteredListActive(false)
-  setIsRegionFilterActive(true)
-  setSelectedRegion(value)
-  setRegionsList(!openRegionList) 
+  console.log("value",value)
+  if (value==="All"){
+    setIsRegionFilterActive(false)
+    setSelectedRegion(value)
+    setRegionsList(!openRegionList) 
+  } else {
+    setLoading(true)
+    setFilteredListActive(false)
+    setIsRegionFilterActive(true)
+    setSelectedRegion(value)
+    setRegionsList(!openRegionList) 
+    
+  }
+  
 
 }
 
 const handleBeneficiary = (value) =>{
+  if(value==="All"){
+    setIsBeneficiaryFilterActive(false)
+    setSelectedBeneficiary(value)
+    setBeneficiaryList(!beneficiaryList)
+  } else {
   setLoading(true)
   setFilteredListActive(false)
   setIsBeneficiaryFilterActive(true)
   setSelectedBeneficiary(value)
   setBeneficiaryList(!beneficiaryList)
-
+  }
 }
 
 useEffect(()=>{
-  
-  if(isRegionFilterActive){
-      
+
+  if(isRegionFilterActive){  
     setFilter(filteredByRegion)
-  }
+  } 
+
+  if(!isRegionFilterActive && !isBeneficiaryFilterActive){  
+    setFilter(filteredList)
+  } 
+
+  if(!isRegionFilterActive && isBeneficiaryFilterActive){  
+   
+    setFilter(filteredByBeneficiary)
+  } 
+  
 
   if(isBeneficiaryFilterActive){
-      
     setFilter(filteredByBeneficiary)
   }
+
+  console.log("isBeneficiaryFilterActive",isBeneficiaryFilterActive)
+  if(isRegionFilterActive && !isBeneficiaryFilterActive){  
+    setFilter(filteredByRegion)
+  } 
+
+
   
   if (isBeneficiaryFilterActive && isRegionFilterActive){
     setFilter(filterByRegionAndBeneficiary)
   }
 
-},[isRegionFilterActive,isBeneficiaryFilterActive,selectedRegion,selectedBeneficiary])
+},[
+  isRegionFilterActive,
+  isBeneficiaryFilterActive,
+  selectedRegion,
+  selectedBeneficiary,
+  isFilteredListActive,  
+])
 
 
 
@@ -103,7 +138,6 @@ useEffect(()=>{
 
         <Layout>
 
-{console.log(filter)}
 <div className="container mx-auto grid md:grid-cols-2 gap-4 grid-cols-1">
 
 <div className="md:my-5 mt-5 bank-form-list md:px-0 px-5">
